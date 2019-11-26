@@ -44,4 +44,14 @@ sed -i "/^# Suricata is multi-threaded./,/  detect-thread-ratio: 1.0/{
 # Copy the content of [bro_affinity_file] to the CPU affinity section of
 #  "/opt/bro/etc/node.cfg"
 printf "Configurando afinidad en /opt/bro/etc/node.cfg ..\n"
-sed -i "/^lb_procs/ R $3" /opt/bro/etc/node.cfg
+# sed -i "/^lb_procs/ R $3" ./node.cfg
+if grep --regexp="^pin_cpus" /opt/bro/etc/node.cfg --quiet; then
+	echo trueeeeeeeeeeeeee
+	sed -i "/^pin_cpus/{
+		R $3
+		d
+	}" /opt/bro/etc/node.cfg
+else
+	echo falseeeeeeeeeeeeeeeeeeee
+	sed -i "/^lb_procs/ R $3" /opt/bro/etc/node.cfg
+fi
